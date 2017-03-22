@@ -1,8 +1,43 @@
-extend layout
+extends layout
 
 block content
-    h1=title
-    p Welcome to #{title}s
+  h2.page-header Node全栈博客系统
+  each post in posts
+      div.post
+        h3.post-title
+            a(href="/posts/view/" + post.slug,target = "blank" )
+                =post.title
+        div.post-abstract
+            =truncate(post.content,150)
+        div.post-meta
+            span.post-created
+                发布时间:
+                =moment(post.created).format("YYYY-MM-DD")
+            span.post-author
+                作者:
+                =post.author.name
+            span.post-category
+                |分类:
+                a(href="/posts/category/" + post.category.name ,target = "_blank")= post.category.name
+            span.post-comment
+                评论:
+                =post.comments.length
+            span.post-favorite
+                获得赞
+                =post.meta.favorite
+            span.post-line
+                a(href="/posts/view/" + post._id,target = "blank" ) 查看全文
+  if pages > 1
+      nav
+          ul.pagination
+              -var currentPage = 1
+              while currentPage < pages
+                  if currentPage === page
+                      li.active
+                          a(href="/posts?page=" + currentPage)= currentPage++
+                  else
+                      li
+                          a(href="/posts?page=" + currentPage)= currentPage++
 
 block scripts
   script $(document).ready(function(){})

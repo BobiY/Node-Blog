@@ -1,0 +1,111 @@
+extends ../layout
+
+block content
+    h2.page-header 文章列表
+
+    form.form-inline.form-filter
+        div.form-group
+            label 分类
+            select#is-category.form-control(name="category")
+                option(value="",selected=(filter.category === "")) - 选择分类 -
+                each category in categories
+                    option(value=category._id,selected=(category._id.toString() === filter.category))= category.name
+        div.form-group
+            label 作者
+            select#is-category.form-control(name="author")
+                option(value="",selected=(filter.author === "")) - 选择作者 -
+                each author in authors
+                    option(value=author._id,selected=(author._id.toString() === filter.author))= author.name
+        button#js-filter-submit.btn.btn-info 筛选
+    table.table.table-bordered
+        thead
+            tr
+                th(width="30%") 
+                    if sortBy === "title"
+                        if sortDir === "desc"
+                            a(href="/admin/posts?page=" + page + "&sortBy=title&sortDir=asc" )
+                                i.fa.fa-arrow-down
+                                    标题
+                        else
+                            a(href="/admin/posts?page=" + page + "&sortBy=title&sortDir=dasc" )
+                                i.fa.fa-arrow-up
+                                    标题
+                    else
+                        a(href="/admin/posts?page=" + page + "&sortBy=title&sortDir=dasc")
+                            标题
+
+                th 
+                    if sortBy === "category"
+                        if sortDir === "desc"
+                            a(href="/admin/posts?page=" + page + "&sortBy=category&sortDir=asc" )
+                                i.fa.fa-arrow-down
+                                    分类
+                        else
+                            a(href="/admin/posts?page=" + page + "&sortBy=category&sortDir=dasc" )
+                                i.fa.fa-arrow-up
+                                    分类
+                    else
+                        a(href="/admin/posts?page=" + page + "&sortBy=category&sortDir=dasc")
+                            分类
+
+                th 
+                    if sortBy === "author"
+                        if sortDir === "desc"
+                            a(href="/admin/posts?page=" + page + "&sortBy=author&sortDir=asc" )
+                                i.fa.fa-arrow-down
+                                    作者
+                        else
+                            a(href="/admin/posts?page=" + page + "&sortBy=author&sortDir=dasc" )
+                                i.fa.fa-arrow-up
+                                    作者
+                    else
+                        a(href="/admin/posts?page=" + page + "&sortBy=author&sortDir=dasc")
+                            作者
+
+                th 
+                    if sortBy === "created"
+                        if sortDir === "desc"
+                            a(href="/admin/posts?page=" + page + "&sortBy=created&sortDir=asc" )
+                                i.fa.fa-arrow-down
+                                    创建时间
+                        else
+                            a(href="/admin/posts?page=" + page + "&sortBy=created&sortDir=dasc" )
+                                i.fa.fa-arrow-up
+                                    创建时间
+                    else
+                        a(href="/admin/posts?page=" + page + "&sortBy=created&sortDir=dasc")
+                            创建时间
+                th 赞数
+                th 评论
+                th 状态
+                th 管理
+        tbody
+            each post in posts
+                tr
+                    td
+                        a(href="/posts/view/" + post._id,target="_blank")= post.title
+                    td= post.category.name    
+                    td= post.author.email    
+                    td= moment(post.created).format("YYYY-MM-DD HH-mm-ss")   
+                    td= post.meta.favorites || 0    
+                    td= post.comments.length || 0
+                    td= post.published ? "已发布":"待发布"
+                    td
+                        a(href="/posts/view/" + post._id, class="btn btn-sm btn-success",target="_blank") 查看 
+                        &nbsp;&nbsp;
+                        a(href="/admin/posts/edit/" + post._id, class="btn btn-sm btn-info",target="_blank") 编辑 
+                        &nbsp;&nbsp; 
+                        a(href="/admin/posts/delete/" + post._id, class="btn btn-sm btn-danger") 删除   
+    if pages > 1
+      nav
+          ul.pagination
+              -var currentPage = 1
+              while currentPage < pages
+                  if currentPage === page
+                      li.active
+                          a(href="/admin/posts?page=" + currentPage + "&category=" + filter.category + "&author=" + filter.author +"&sortBy=" + sortBy+ "&sortDir=" + sortDir)= currentPage++
+                  else
+                      li
+                          a(href="/admin/posts?page=" + currentPage + "&category=" + filter.category + "&author=" + filter.author +"&sortBy=" + sortBy+ "&sortDir=" + sortDir)= currentPage++
+block scripts
+    script(src="/js/admin/post.js")  

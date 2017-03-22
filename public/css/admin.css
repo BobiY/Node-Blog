@@ -85,7 +85,12 @@ body {
   margin-top: 0;
 }
 
-
+.form-filter{
+  margin-bottom: 20px;
+}
+.form-filter .form-group{
+  margin: 0 10px;
+}
 /*
  * Placeholder dashboard ideas
  */

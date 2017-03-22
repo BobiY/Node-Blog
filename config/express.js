@@ -3,10 +3,17 @@ var glob = require('glob');
 
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var moment = require('moment');
+var truncate = require('truncate');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var methodOverride = require('method-override');
+var session = require("express-session");
+var messages = require("express-messages");
+var flash = require("connect-flash");
+var mongoose = require('mongoose');
+var Category = mongoose.model('Category');
 
 module.exports = function(app, config) {
   var env = process.env.NODE_ENV || 'development';
@@ -17,8 +24,15 @@ module.exports = function(app, config) {
   app.set('view engine', 'jade');
   app.use(function(req,res,next){
     app.locals.pageName = req.path;
-    //console.log(app.locals.pageName)
-    next();
+    app.locals.moment = moment;
+    app.locals.truncate = truncate;
+    Category.find(function(err,categories){
+       if(err){
+         return next(err);
+       }
+       app.locals.categories = categories;
+       next();
+    })
   })
   // app.use(favicon(config.root + '/public/img/favicon.ico'));
   app.use(logger('dev'));
@@ -27,11 +41,22 @@ module.exports = function(app, config) {
     extended: true
   }));
   app.use(cookieParser());
+  app.use(session({
+    secret:"nodeblog",
+    resave:false,
+    saveUninitialized:true,
+    cookie:{ secure:false }
+  }));
+  app.use(flash());
+  app.use(function(req,res,next){
+    res.locals.messages = messages(req,res);
+    next();
+  })
   app.use(compress());
   app.use(express.static(config.root + '/public'));
   app.use(methodOverride());
 
-  var controllers = glob.sync(config.root + '/app/controllers/*.js');
+  var controllers = glob.sync(config.root + '/app/controllers/**/*.js');
   controllers.forEach(function (controller) {
     require(controller)(app);
   });
