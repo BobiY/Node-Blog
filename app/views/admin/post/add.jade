@@ -3,22 +3,26 @@ extends ../layout
 block content
     h2.page-header 文章分类
 
+    if errors && errors.length
+        div.errors
+            each error in errors
+                p.alert.alert-danger= error.msg
     form.vertical-form(method="post",action="/admin/posts/add")
         div.form-group
             label(for="title") 标题
-            input.form-control.input-lg(name="title",placeholder="请输入标题...")
+            input.form-control.input-lg(name="title",placeholder="请输入标题..." ,required="true",value=post ? post.title : "")
         
          div.form-group
             label(for="category") 分类
-            select.form-control.input-lg(name="category")
+            select.form-control.input-lg(name="category" ,required="true")
                 option(value="",selected=true) - 选择分类 -
                 each category in categories
-                    option(value=category._id)= category.name
+                    option(value=category._id  selected = post ? category._id.toString() === post.category._id.toString() : false)= category.name
         div.form-group
             label(for="content") 内容
-            textarea#js-post-content.form-control(name="content")
+            textarea#js-post-content.form-control(name="content",required="true" )= post ? post.content : ""
 
-        button.btn.btn-info(type="submit") 发布 
+        button.btn.btn-info(type="submit")= post ? "保存" : "发布"
 block scripts
     script(src="/js/ckeditor/ckeditor.js")
     script(src="/js/admin/post.js")

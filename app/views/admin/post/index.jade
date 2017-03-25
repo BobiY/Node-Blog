@@ -16,6 +16,9 @@ block content
                 option(value="",selected=(filter.author === "")) - 选择作者 -
                 each author in authors
                     option(value=author._id,selected=(author._id.toString() === filter.author))= author.name
+        div.form-group
+            label 关键词
+            input#js-keyword.form-control(name="keyword",type="text",value=filter.keyword)
         button#js-filter-submit.btn.btn-info 筛选
     table.table.table-bordered
         thead
@@ -83,7 +86,7 @@ block content
             each post in posts
                 tr
                     td
-                        a(href="/posts/view/" + post._id,target="_blank")= post.title
+                        a(href="/posts/view/" + post._id,target="_blank",title=post.slug)= post.title
                     td= post.category.name    
                     td= post.author.email    
                     td= moment(post.created).format("YYYY-MM-DD HH-mm-ss")   

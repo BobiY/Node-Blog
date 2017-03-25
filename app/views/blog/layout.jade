@@ -8,7 +8,7 @@ block main
       .container
         nav.blog-nav
           if pageName === "/posts/"
-              a.blog-nav-item.active(href="/") 主页
+              a.blog-nav-item.active(href="/posts") 主页
           else
               a.blog-nav-item(href="/") 主页
 
@@ -50,4 +50,8 @@ block main
     footer.blog-footer
       p Node Blog 
       p
-        a(href="#") Back to top
+        a(href="#") 回到顶部
+        &nbsp;&nbsp;&nbsp;
+        a(href="/admin/users/login") 用户登陆
+        &nbsp;&nbsp;&nbsp;
+        a(href="/admin/users/register") 用户注册

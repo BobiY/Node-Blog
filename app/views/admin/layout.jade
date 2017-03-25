@@ -20,11 +20,14 @@ block main
         |         
         #navbar.navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
-            li
-              a(href="/admin/users/logout") 
-                i.fa.fa-unlock-alt
-                | &nbsp;注销
-            |             
+            if user
+              li
+                a= user.email
+              li
+                a(href="/admin/users/logout") 
+                  i.fa.fa-unlock-alt
+                  | &nbsp;注销
+                        
             li
               a(href="#") 
                 i.fa.fa-question
@@ -44,13 +47,13 @@ block main
               i.fa.fa-file-o
               | &nbsp;添加文章
           |             
-          li(class={active: pageName === "/admin/categories"})
-            a(href="/admin/categories") 
+          li(class={active: pageName === "/admin/category"})
+            a(href="/admin/category") 
               i.fa.fa-th-list
               | &nbsp;分类列表
           |             
-          li(class={active: pageName === "/admin/categories/add"})
-            a(href="/admin/categories/add") 
+          li(class={active: pageName === "/admin/category/add"})
+            a(href="/admin/category/add") 
               i.fa.fa-plus
               | &nbsp;添加分类
         |           

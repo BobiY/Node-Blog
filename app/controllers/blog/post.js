@@ -9,7 +9,7 @@ module.exports = function (app) {
 };
 
 router.get('/', function (req, res, next) {
-  Post.find({ published:true }).populate("category").populate("author").exec(function (err, posts) {
+  Post.find({ published:true }).sort({created:-1}).populate("category").populate("author").exec(function (err, posts) {
     if (err) return next(err);
     var page = Math.abs(parseInt(req.query.page || 1));
     var postCount = posts.length;
@@ -61,7 +61,6 @@ router.get('/view/:id', function (req, res, next) {
   } catch(err){
     conditions.slug = req.params.id
   }
-  console.log(conditions)
   Post.findOne(conditions)
       .populate('category')
       .populate('author')

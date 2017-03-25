@@ -1,0 +1,22 @@
+extends ../layout_user
+
+block content
+
+    form.form-signin(method="post",action="/admin/users/register")
+        h2.form-signin-heading 管理员注册
+           small
+               a.pull-right(href='/admin/users/login') 登陆 
+        != messages()   
+        label.sr-only(for="email") 邮箱
+               
+        input#email.form-control(type="email", placeholder="Email address", required="true", autofocus="",name = "email")
+                
+        label.sr-only(for="password") 密码
+               
+        input#password.form-control(name="password",type="password", placeholder="Password", required="")
+
+        label.sr-only(for="password") 重复密码
+               
+        input#password.form-control(name="passwordPast",type="password", placeholder="Copy Password", required="")
+                  
+        button.btn.btn-lg.btn-primary.btn-block(type="submit") 注册
